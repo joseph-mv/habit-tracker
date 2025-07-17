@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
-interface HabitState {
+export interface HabitState {
     name:string,
     notes:string,
     checklist?:Record<string,boolean>[]

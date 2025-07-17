@@ -1,3 +1,4 @@
+import Habit from "@/src/components/Habit"
 import Model from "@/src/components/Model"
 import { useAppSelector } from "@/src/store/hooks"
 import { Ionicons } from "@expo/vector-icons"
@@ -32,10 +33,7 @@ export default function Index() {
         keyExtractor={(_, index) => index.toString()}
         contentContainerStyle={styles.habitList}
         renderItem={({ item }) => (
-          <View style={styles.habitItem}>
-            <Text style={styles.habitName}>{item.name}</Text>
-            <Text style={styles.habitNotes}>{item.notes}</Text>
-          </View>
+          <Habit item={item}/>
         )}
         ListEmptyComponent={
           <Text style={styles.emptyMessage}>No habits added yet.</Text>
@@ -75,22 +73,6 @@ const styles = StyleSheet.create({
   },
   habitList: {
     paddingBottom: 20,
-  },
-  habitItem: {
-    backgroundColor: "#1e293b", // dark card
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 12,
-  },
-  habitName: {
-    fontSize: 18,
-    color: "#facc15", // yellow-400
-    fontWeight: "bold",
-    marginBottom: 4,
-  },
-  habitNotes: {
-    fontSize: 14,
-    color: "#cbd5e1", // gray-300
   },
   emptyMessage: {
     textAlign: "center",
