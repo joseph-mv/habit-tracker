@@ -1,23 +1,101 @@
-import { StyleSheet, Text, View } from "react-native";
+import Model from "@/src/components/Model"
+import { useAppSelector } from "@/src/store/hooks"
+import { Ionicons } from "@expo/vector-icons"
+import { useState } from "react"
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native"
 
 export default function Index() {
+  const [isModelOpen, setIsModelOpen] = useState(false)
+  const habits = useAppSelector((state) => state.habits)
+
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Habit Tracker</Text>
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={() => setIsModelOpen(true)}
+      >
+        <Ionicons name="add" size={24} color="#fff" />
+      </TouchableOpacity>
+
+      <Model isModelOpen={isModelOpen} setIsModelOpen={setIsModelOpen} />
+
+      <Text style={styles.heading}>Your Habits</Text>
+
+      <FlatList
+        data={habits}
+        keyExtractor={(_, index) => index.toString()}
+        contentContainerStyle={styles.habitList}
+        renderItem={({ item }) => (
+          <View style={styles.habitItem}>
+            <Text style={styles.habitName}>{item.name}</Text>
+            <Text style={styles.habitNotes}>{item.notes}</Text>
+          </View>
+        )}
+        ListEmptyComponent={
+          <Text style={styles.emptyMessage}>No habits added yet.</Text>
+        }
+      />
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor:'black',
-    flex:1
+    flex: 1,
+    backgroundColor: "#0f172a", // dark slate
+    padding: 16,
   },
   heading: {
-    margin: 2,
-    color: "red",
-    fontSize: 20,
-    fontWeight: "800",
-    fontFamily: "serif",
+    color: "#e2e8f0", // light text
+    fontSize: 22,
+    fontWeight: "700",
+    marginBottom: 16,
+    textAlign: "center",
   },
-});
+  addButton: {
+    alignSelf: "flex-end",
+    backgroundColor: "#2563eb", // blue-600
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 16,
+    elevation: 5,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 3,
+  },
+  habitList: {
+    paddingBottom: 20,
+  },
+  habitItem: {
+    backgroundColor: "#1e293b", // dark card
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 12,
+  },
+  habitName: {
+    fontSize: 18,
+    color: "#facc15", // yellow-400
+    fontWeight: "bold",
+    marginBottom: 4,
+  },
+  habitNotes: {
+    fontSize: 14,
+    color: "#cbd5e1", // gray-300
+  },
+  emptyMessage: {
+    textAlign: "center",
+    color: "#94a3b8",
+    fontSize: 16,
+    marginTop: 40,
+  },
+})
