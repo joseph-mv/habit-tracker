@@ -23,7 +23,7 @@ type ModelProps = {
 
 const Model = ({ isModelOpen, setIsModelOpen,initialHabitDetails,index }: ModelProps) => {
   const dispatch = useAppDispatch();
-  const [habitDetails, setHabitDetails] = useState(initialHabitDetails || { name: "", notes: "" });
+  const [habitDetails, setHabitDetails] = useState(initialHabitDetails || { name: "", notes: "",checklist:{} });
   
   const handleSave = () => {
     if (habitDetails.name.trim()) {
@@ -31,7 +31,7 @@ const Model = ({ isModelOpen, setIsModelOpen,initialHabitDetails,index }: ModelP
         dispatch(editHabit({index,habit:habitDetails}))
       }else{
         dispatch(addHabit(habitDetails));
-        setHabitDetails({name:'',notes:''})
+        setHabitDetails({name:'',notes:'',checklist:{}})
       }
       setIsModelOpen(false);
     }
@@ -40,7 +40,7 @@ const Model = ({ isModelOpen, setIsModelOpen,initialHabitDetails,index }: ModelP
   const handleClose=() =>{
     setIsModelOpen(false)
     if(!index && index !== 0){
-      setHabitDetails({name:'',notes:''})
+      setHabitDetails({name:'',notes:'',checklist:{}})
     }
   }
 

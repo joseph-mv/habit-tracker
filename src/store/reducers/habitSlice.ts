@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 export interface HabitState {
     name:string,
     notes:string,
-    checklist?:Record<string,boolean>[]
+    checklist:Record<string,boolean>
 }
 
 const initialState:HabitState[] =[]
