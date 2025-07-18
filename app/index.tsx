@@ -32,8 +32,8 @@ export default function Index() {
         data={habits}
         keyExtractor={(_, index) => index.toString()}
         contentContainerStyle={styles.habitList}
-        renderItem={({ item }) => (
-          <Habit item={item}/>
+        renderItem={({ item,index }) => (
+          <Habit habitDetails={item} index={index}/>
         )}
         ListEmptyComponent={
           <Text style={styles.emptyMessage}>No habits added yet.</Text>

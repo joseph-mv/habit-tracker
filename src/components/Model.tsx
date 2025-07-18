@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   KeyboardAvoidingView,
   Modal,
@@ -11,29 +11,37 @@ import {
   View
 } from "react-native";
 import { useAppDispatch } from "../store/hooks";
-import { addHabit } from "../store/reducers/habitSlice";
+import { addHabit, editHabit, HabitState } from "../store/reducers/habitSlice";
 
 // Props for modal
 type ModelProps = {
   isModelOpen: boolean;
   setIsModelOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  initialHabitDetails?:HabitState;
+  index?:number
 };
 
-const Model = ({ isModelOpen, setIsModelOpen }: ModelProps) => {
+const Model = ({ isModelOpen, setIsModelOpen,initialHabitDetails,index }: ModelProps) => {
   const dispatch = useAppDispatch();
-  const [habitDetails, setHabitDetails] = useState({ name: "", notes: "" });
-
+  const [habitDetails, setHabitDetails] = useState(initialHabitDetails || { name: "", notes: "" });
+  
   const handleSave = () => {
     if (habitDetails.name.trim()) {
-      dispatch(addHabit(habitDetails));
-      setHabitDetails({name:'',notes:''})
+      if(index || index === 0){
+        dispatch(editHabit({index,habit:habitDetails}))
+      }else{
+        dispatch(addHabit(habitDetails));
+        setHabitDetails({name:'',notes:''})
+      }
       setIsModelOpen(false);
     }
   };
   
   const handleClose=() =>{
     setIsModelOpen(false)
-    setHabitDetails({name:'',notes:''})
+    if(!index && index !== 0){
+      setHabitDetails({name:'',notes:''})
+    }
   }
 
   return (
