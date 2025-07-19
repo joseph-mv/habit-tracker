@@ -1,6 +1,7 @@
 import Habit from "@/src/components/Habit"
 import Model from "@/src/components/Model"
 import { useAppSelector } from "@/src/store/hooks"
+import { getTodayDate } from "@/src/utils/date"
 import { Ionicons } from "@expo/vector-icons"
 import { useState } from "react"
 import {
@@ -14,6 +15,7 @@ import {
 export default function Index() {
   const [isModelOpen, setIsModelOpen] = useState(false)
   const habits = useAppSelector((state) => state.habits)
+  const date = getTodayDate()
 
   return (
     <View style={styles.container}>
@@ -33,7 +35,7 @@ export default function Index() {
         keyExtractor={(_, index) => index.toString()}
         contentContainerStyle={styles.habitList}
         renderItem={({ item,index }) => (
-          <Habit habitDetails={item} index={index}/>
+          <Habit habitDetails={item} index={index} date={date}/>
         )}
         ListEmptyComponent={
           <Text style={styles.emptyMessage}>No habits added yet.</Text>

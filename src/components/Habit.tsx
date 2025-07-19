@@ -2,10 +2,17 @@ import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useAppDispatch } from "../store/hooks";
-import { deleteHabit, HabitState } from "../store/reducers/habitSlice";
+import { deleteHabit, HabitState, toggleHabitStatus } from "../store/reducers/habitSlice";
+import { getTodayDate } from "../utils/date";
 import Model from "./Model";
 
-const Habit = ({habitDetails, index}:{habitDetails:HabitState, index:number}) => {
+type HabitProps={
+  habitDetails:HabitState, 
+  index:number
+  date:string
+}
+
+const Habit = ({habitDetails, index,date}:HabitProps) => {
   const dispatch = useAppDispatch()
   const [isModelOpen, setIsModelOpen] = useState(false)
   
@@ -14,9 +21,18 @@ const Habit = ({habitDetails, index}:{habitDetails:HabitState, index:number}) =>
   }
   return (
     <View style={styles.habitItem}>
+      <View style={styles.firstContainer}>
+        
+      <TouchableOpacity
+        // style={styles.addButton}
+        onPress={() => dispatch(toggleHabitStatus({index,date:getTodayDate()}))}
+      >
+        <Ionicons name={habitDetails.checklist[date] ?"checkmark-circle":"checkmark-circle-outline" }size={30} color="#5dd952ff" />
+      </TouchableOpacity>
       <View>
       <Text style={styles.habitName}>{habitDetails.name}</Text>
       <Text style={styles.habitNotes}>{habitDetails.notes}</Text>  
+      </View>
       </View>
       <View style={styles.btnContainer}>
         <TouchableOpacity
@@ -35,6 +51,7 @@ const Habit = ({habitDetails, index}:{habitDetails:HabitState, index:number}) =>
       <Model isModelOpen={isModelOpen} setIsModelOpen={setIsModelOpen} index={index} initialHabitDetails={habitDetails}/>
         
       </View>   
+
     </View>
   );
 };
@@ -59,6 +76,12 @@ const styles = StyleSheet.create({
   habitNotes: {
     fontSize: 14,
     color: "#cbd5e1", // gray-300
+  },
+  firstContainer:{
+    flex:1,
+    flexDirection:"row",
+    alignItems:'center',
+    gap:6
   },
   btnContainer:{
     alignSelf:'baseline',
