@@ -1,8 +1,24 @@
+
+const dateFormat = (date:Date)=>{
+  const dd = date.getDate()
+  const mm = date.getMonth()+1
+  const yyyy = date.getFullYear()
+  return (`${dd}/${mm}/${yyyy}`)
+}
+
 export const getTodayDate = ():string => {
   const today = new Date();
-  return `${today.getDate().toString().padStart(2, "0")}/${(
-    today.getMonth() + 1
-  )
-    .toString()
-    .padStart(2, "0")}/${today.getFullYear()}`;
+  return dateFormat(today)
 };
+
+export const getLastNDays =(n:number) =>{
+  const dates=[]
+  const today = new Date()
+  for(let i=0;i<n;i++){
+    const pastDate = new Date()
+    pastDate.setDate(today.getDate()-i)
+    dates.push(dateFormat(pastDate))
+  }
+  console.log(dates)
+  return dates
+}
