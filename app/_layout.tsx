@@ -7,8 +7,8 @@ import { PersistGate } from "redux-persist/integration/react";
 export default function RootLayout() {
   return (
     <Provider store={store}>
-      <PersistGate loading={<ActivityIndicator/>} persistor={persistor} >
-      <Stack />
+      <PersistGate loading={<ActivityIndicator />} persistor={persistor} >
+        <Stack />
       </PersistGate>
     </Provider>
   );

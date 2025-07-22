@@ -17,30 +17,31 @@ import { addHabit, editHabit, HabitState } from "../store/reducers/habitSlice";
 type ModelProps = {
   isModelOpen: boolean;
   setIsModelOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  initialHabitDetails?:HabitState;
-  index?:number
+  initialHabitDetails?: HabitState;
+  index?: number
 };
 
-const Model = ({ isModelOpen, setIsModelOpen,initialHabitDetails,index }: ModelProps) => {
+const Model = ({ isModelOpen, setIsModelOpen, initialHabitDetails, index }: ModelProps) => {
   const dispatch = useAppDispatch();
-  const [habitDetails, setHabitDetails] = useState(initialHabitDetails || { name: "", notes: "",checklist:{} });
-  
+  const [habitDetails, setHabitDetails] = useState(initialHabitDetails || { name: "", notes: "", checklist: {} });
+
   const handleSave = () => {
     if (habitDetails.name.trim()) {
-      if(index || index === 0){
-        dispatch(editHabit({index,habit:habitDetails}))
-      }else{
+      if (index || index === 0) {
+        dispatch(editHabit({ index, habit: habitDetails }))
+      }
+       else {
         dispatch(addHabit(habitDetails));
-        setHabitDetails({name:'',notes:'',checklist:{}})
+        setHabitDetails({ name: '', notes: '', checklist: {} })
       }
       setIsModelOpen(false);
     }
   };
-  
-  const handleClose=() =>{
+
+  const handleClose = () => {
     setIsModelOpen(false)
-    if(!index && index !== 0){
-      setHabitDetails({name:'',notes:'',checklist:{}})
+    if (!index && index !== 0) {
+      setHabitDetails({ name: '', notes: '', checklist: {} })
     }
   }
 
