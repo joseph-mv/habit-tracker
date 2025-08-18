@@ -1,7 +1,7 @@
 import Habit from "@/src/components/Habit"
 import Model from "@/src/components/Model"
 import { useAppSelector } from "@/src/store/hooks"
-import { getLastNDays, getTodayDate } from "@/src/utils/date"
+import { getLastMonths, getTodayDate } from "@/src/utils/date"
 import { Ionicons } from "@expo/vector-icons"
 import { useState } from "react"
 import {
@@ -17,13 +17,16 @@ export default function Index() {
   const habits = useAppSelector((state) => state.habits)
   const date = getTodayDate()
 
-  const pastDates=getLastNDays(60)
+  const pastMonths = getLastMonths(12)
 
   return (
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.addButton}
-        onPress={() => setIsModelOpen(true)}
+        onPress={() =>{ 
+          setIsModelOpen(true)
+        }
+        }
       >
         <Ionicons name="add" size={24} color="#fff" />
       </TouchableOpacity>
@@ -37,7 +40,7 @@ export default function Index() {
         keyExtractor={(_, index) => index.toString()}
         contentContainerStyle={styles.habitList}
         renderItem={({ item,index }) => (
-          <Habit habitDetails={item} index={index} date={date} pastDates={pastDates}/>
+          <Habit habitDetails={item} index={index} date={date} pastMonths={pastMonths}/>
         )}
         ListEmptyComponent={
           <Text style={styles.emptyMessage}>No habits added yet.</Text>

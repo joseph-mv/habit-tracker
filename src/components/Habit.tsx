@@ -1,21 +1,23 @@
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 import { useAppDispatch } from "../store/hooks";
 import { deleteHabit, HabitState, toggleHabitStatus } from "../store/reducers/habitSlice";
-import { getLastNDays, getTodayDate } from "../utils/date";
+import { dateFormat, getTodayDate, reArrangeArray } from "../utils/date";
 import Model from "./Model";
 
 type HabitProps = {
   habitDetails: HabitState,
   index: number
   date: string,
-  pastDates:string[]
+  pastMonths: (Date | null)[][]
 }
 
-const Habit = ({ habitDetails, index, date,pastDates }: HabitProps) => {
+const Habit = ({ habitDetails, index, date, pastMonths }: HabitProps) => {
   const dispatch = useAppDispatch()
   const [isModelOpen, setIsModelOpen] = useState(false)
+  const today = new Date()
 
   const handleDelete = () => {
     dispatch(deleteHabit(index))
@@ -23,14 +25,22 @@ const Habit = ({ habitDetails, index, date,pastDates }: HabitProps) => {
   return (
     <View style={styles.container}>
       <View style={styles.habitItem}>
-
         <View style={styles.firstContainer}>
-
           <TouchableOpacity
             // style={styles.addButton}
-            onPress={() => dispatch(toggleHabitStatus({ index, date: getTodayDate() }))}
+            onPress={() =>
+              dispatch(toggleHabitStatus({ index, date: getTodayDate() }))
+            }
           >
-            <Ionicons name={habitDetails.checklist[date] ? "checkmark-circle" : "checkmark-circle-outline"} size={30} color="#5dd952ff" />
+            <Ionicons
+              name={
+                habitDetails.checklist[date]
+                  ? "checkmark-circle"
+                  : "checkmark-circle-outline"
+              }
+              size={30}
+              color="#5dd952ff"
+            />
           </TouchableOpacity>
           <View>
             <Text style={styles.habitName}>{habitDetails.name}</Text>
@@ -52,22 +62,50 @@ const Habit = ({ habitDetails, index, date,pastDates }: HabitProps) => {
           >
             <Ionicons name="pencil" size={18} color="orange" />
           </TouchableOpacity>
-          <Model isModelOpen={isModelOpen} setIsModelOpen={setIsModelOpen} index={index} initialHabitDetails={habitDetails} />
+          <Model
+            isModelOpen={isModelOpen}
+            setIsModelOpen={setIsModelOpen}
+            index={index}
+            initialHabitDetails={habitDetails}
+          />
         </View>
-
       </View>
 
-      <View style={styles.dates}>
-      {pastDates.map((date,index)=>(
+      <ScrollView horizontal style={styles.months}>
+        {pastMonths.map((month, index) => (
+          <FlatList
+            key={index}
+            style={styles.month}
+            contentContainerStyle={styles.monthContainer}
+            data={reArrangeArray(month)}
+            renderItem={({ item }) => <View style={styles.week}>{item.map((date,i) => <View key={i} style={[styles.date,
+            {
+              backgroundColor:
+                date === null
+                  ? '#1E1E2E'   // empty slot (subtle dark background)
+                  : habitDetails.checklist[dateFormat(date)]
+                    ? '#00E676' // completed (neon green)
+                    : date > today
+                      ? '#00B0FF' // future (bright cyan)
+                      : '#FF4081' // missed (pink/red)
+            }
+
+            ]}>{date?.getDate()}</View>)}</View>}
+          />
+        ))}
+      </ScrollView>
+
+      {/* <View style={styles.dates}>
+      {pastMonths.map((date,index)=>(
         <View key={index}  style={[styles.date, {backgroundColor:`${habitDetails.checklist[date]?'green':'gray'}`}]} ></View>
       ))}
-      </View>
+      </View> */}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container:{
+  container: {
     backgroundColor: "#1e293b", // dark card
     padding: 16,
     borderRadius: 12,
@@ -75,11 +113,12 @@ const styles = StyleSheet.create({
   },
 
   habitItem: {
-    flex: 1,
+    // flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-   
+    // backgroundColor: 'green'
+
   },
   habitName: {
     fontSize: 18,
@@ -95,10 +134,11 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     alignItems: 'center',
-    gap: 6
+    gap: 6,
+
   },
   btnContainer: {
-    alignSelf: 'baseline',
+    // alignSelf: 'baseline',
     flexDirection: 'row-reverse',
     gap: 10
   },
@@ -108,24 +148,52 @@ const styles = StyleSheet.create({
   editBtn: {
 
   },
-  dates:{
-    boxSizing:'border-box',
-    marginTop:12,
+  months: {
+    // backgroundColor:'yellow',
+  },
+
+  month: {
+    margin: 4,
+    // borderWidth:1,
+    // borderColor:'black',
+    // backgroundColor:'red',
+    flexDirection: 'row',
+  },
+
+  monthContainer: {
+    // padding:1,
+    // flex:1,
+    // backgroundColor:'red'
+    // flexDirection:'column',
+    // justifyContent:'space-around',
+    // alignItems:'center'
+  },
+
+
+  week: {
+    // boxSizing:'border-box',
+    // marginTop:12,
+    // padding:10,
     // gap:3,
-    flex:1,
-    flexDirection:'row-reverse',
-    flexWrap:'wrap-reverse',
-    backgroundColor:'yellow'
+    flex: 1,
+    flexDirection: 'column',
+    // flexWrap:'wrap-reverse',
+    // backgroundColor:'yellow'
   }
   ,
-  date:{
-    boxSizing:'border-box',
-    flex:1,
-    flexBasis:'6.66%',
-    height:10,
-    backgroundColor:'gray',
-    borderWidth: 2, 
+  date: {
+    // boxSizing:'border-box',
+    // flex:1,
+    // flexBasis:'14%',
+    aspectRatio: 1,
+    margin: 1,
+    height: 20,
+    width: 20,
+    borderRadius: 4,
+    // backgroundColor:'gray',
+    // borderWidth: 1, 
     borderColor: 'black',
+    textAlign: 'center'
   }
 })
 

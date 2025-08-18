@@ -1,15 +1,11 @@
-import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import habitReducer from "./reducers/habitSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { persistReducer, persistStore } from "redux-persist";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import {
-  FLUSH,
-  REHYDRATE,
-  PAUSE,
-  PERSIST,
-  PURGE,
-  REGISTER,
+  FLUSH, PAUSE,
+  PERSIST, persistReducer, persistStore, PURGE,
+  REGISTER, REHYDRATE
 } from "redux-persist";
+import habitReducer from "./reducers/habitSlice";
 
 const rootReducer = combineReducers({
   habits: habitReducer,
