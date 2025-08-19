@@ -73,6 +73,7 @@ const Habit = ({ habitDetails, index, date, pastMonths }: HabitProps) => {
 
       <ScrollView horizontal style={styles.months}>
         {pastMonths.map((month, index) => (
+         <View> 
           <FlatList
             key={index}
             style={styles.month}
@@ -92,6 +93,11 @@ const Habit = ({ habitDetails, index, date, pastMonths }: HabitProps) => {
 
             ]}>{date?.getDate()}</View>)}</View>}
           />
+          <Text style={{textAlign:"center", color:'white'}}>
+            {month[15]?.toLocaleString('default',{month:'long'})}
+          </Text>
+          </View>
+          
         ))}
       </ScrollView>
 
