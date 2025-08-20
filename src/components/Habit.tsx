@@ -4,7 +4,7 @@ import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native
 import { ScrollView } from "react-native-gesture-handler";
 import { useAppDispatch } from "../store/hooks";
 import { deleteHabit, HabitState, toggleHabitStatus } from "../store/reducers/habitSlice";
-import { dateFormat, getTodayDate, reArrangeArray } from "../utils/date";
+import { dateFormat, reArrangeArray } from "../utils/date";
 import Model from "./Model";
 
 type HabitProps = {
@@ -29,7 +29,7 @@ const Habit = ({ habitDetails, index, date, pastMonths }: HabitProps) => {
           <TouchableOpacity
             // style={styles.addButton}
             onPress={() =>
-              dispatch(toggleHabitStatus({ index, date: getTodayDate() }))
+              dispatch(toggleHabitStatus({ index, date: date }))
             }
           >
             <Ionicons
