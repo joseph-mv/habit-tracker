@@ -83,18 +83,20 @@ const Habit = ({ habitDetails, index, date, pastMonths }: HabitProps) => {
             {
               backgroundColor:
                 date === null
-                  ? '#1E1E2E'   // empty slot (subtle dark background)
+                  ? '#1E1E2E'   // empty slot 
                   : habitDetails.checklist[dateFormat(date)]
-                    ? '#00E676' // completed (neon green)
+                    ? '#54eda3ff' // completed 
                     : date > today
-                      ? '#00B0FF' // future (bright cyan)
-                      : '#FF4081' // missed (pink/red)
+                      ? '#044868ff' // future 
+                      : '#FF4081' // missed 
             }
 
-            ]}>{date?.getDate()}</View>)}</View>}
+            ]}>
+              <Text style={{color:'black', textAlign:'center', fontSize:8}} >{date?.getDate()}</Text>
+              </View>)}</View>}
           />
           <Text style={{textAlign:"center", color:'white'}}>
-            {month[15]?.toLocaleString('default',{month:'long'})}
+            {month[15]?.toLocaleString('default',{month:'short'})}
           </Text>
           </View>
           
@@ -192,14 +194,13 @@ const styles = StyleSheet.create({
     // flex:1,
     // flexBasis:'14%',
     aspectRatio: 1,
-    margin: 1,
-    height: 20,
-    width: 20,
-    borderRadius: 4,
+    margin: 0.8,
+    height: 12,
+    width: 12,
+    borderRadius: 2,
     // backgroundColor:'gray',
     // borderWidth: 1, 
     borderColor: 'black',
-    textAlign: 'center'
   }
 })
 
