@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { useAppDispatch } from "../store/hooks";
@@ -16,6 +16,8 @@ type HabitProps = {
 
 const Habit = ({ habitDetails, index, date, pastMonths }: HabitProps) => {
   const dispatch = useAppDispatch()
+  const scrollViewRef = useRef<ScrollView>(null);
+
   const [isModelOpen, setIsModelOpen] = useState(false)
   const today = new Date()
 
@@ -71,7 +73,11 @@ const Habit = ({ habitDetails, index, date, pastMonths }: HabitProps) => {
         </View>
       </View>
 
-      <ScrollView horizontal style={styles.months}>
+      <ScrollView
+      ref={scrollViewRef}
+       horizontal onContentSizeChange={() =>
+        scrollViewRef.current?.scrollToEnd({ animated: false })
+      } style={styles.months}>
         {pastMonths.map((month, index) => (
          <View> 
           <FlatList
@@ -81,15 +87,16 @@ const Habit = ({ habitDetails, index, date, pastMonths }: HabitProps) => {
             data={reArrangeArray(month)}
             renderItem={({ item }) => <View style={styles.week}>{item.map((date,i) => <View key={i} style={[styles.date,
             {
-              backgroundColor:
-                date === null
-                  ? '#1E1E2E'   // empty slot 
-                  : habitDetails.checklist[dateFormat(date)]
-                    ? '#54eda3ff' // completed 
-                    : date > today
-                      ? '#044868ff' // future 
-                      : '#FF4081' // missed 
-            }
+            backgroundColor:
+              date === null
+                ? "rgba(63, 65, 38, 0.15)"   // empty slot 
+                : habitDetails.checklist[dateFormat(date)]
+                  ? "rgba(229, 241, 8, 1)"  // completed 
+                  : date > today
+                    ? "rgba(229, 145, 48, 0.1)" // future 
+                    : "rgba(229, 241, 8, 0.18)" // missed
+          },
+
 
             ]}>
               <Text style={{color:'black', textAlign:'center', fontSize:8}} >{date?.getDate()}</Text>
@@ -103,11 +110,6 @@ const Habit = ({ habitDetails, index, date, pastMonths }: HabitProps) => {
         ))}
       </ScrollView>
 
-      {/* <View style={styles.dates}>
-      {pastMonths.map((date,index)=>(
-        <View key={index}  style={[styles.date, {backgroundColor:`${habitDetails.checklist[date]?'green':'gray'}`}]} ></View>
-      ))}
-      </View> */}
     </View>
   );
 };
@@ -195,8 +197,8 @@ const styles = StyleSheet.create({
     // flexBasis:'14%',
     aspectRatio: 1,
     margin: 0.8,
-    height: 12,
-    width: 12,
+    height: 14,
+    width: 14,
     borderRadius: 2,
     // backgroundColor:'gray',
     // borderWidth: 1, 
