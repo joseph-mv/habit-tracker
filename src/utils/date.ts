@@ -25,12 +25,13 @@ export const getLastNDays =(n:number) =>{
 export const getLastMonths = (n:number)=>{
   const months = []
   const today = new Date()
-  // console.log('today',today)
+  
+  const FirstDay = new Date()
+  FirstDay.setDate(1)
+
   for(let i =0;i<n;i++){
     const month= []
-    const FirstDay = new Date()
     FirstDay.setMonth(today.getMonth()-i)
-    FirstDay.setDate(1)
     let date = new Date(FirstDay)
     const day =FirstDay.getDay()
 
